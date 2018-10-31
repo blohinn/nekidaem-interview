@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Feed{% endblock %}
+
+{% block page_content %}
+    <h2>Feed</h2>
+
+    {% for article in object_list %}
+        <h2>{{ article.title }}</h2>
+        <p>{{ article.body|truncatechars:240 }}</p>
+        <p>{{ article.created|date }} {{ article.created|time }}</p>
+
+        <ul style="padding-left: 0">
+            <li>
+                <a href="{% url 'blog_app:blog_articles' pk=article.blog.pk %}">
+                    <b>{{ article.blog.owner.username }}</b> - {{ article.blog.name }}
+                </a>
+            </li>
+            {% if not request.user.is_anonymous %}
+                <li><a href="{% url 'feed_app:subscribe' pk=article.blog.pk %}">Subscribe to this blog</a></li>
+                <li><a href="#">Mark as read</a></li>
+            {% endif %}
+        </ul>
+
+        <hr>
+    {% empty %}
+        <p>No articles yet.</p>
+    {% endfor %}
+
+    {% include 'utils/page_obj_paginator.html' %}
+{% endblock %}

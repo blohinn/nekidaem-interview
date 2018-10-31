@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.views.generic import ListView
 
-from .models import BlogArticle
+from .models import BlogArticle, Blog
 from .forms import BlogArticleForm
 
 
@@ -35,14 +35,17 @@ class CreateEditArticle(LoginRequiredMixin, View):
         })
 
 
-class BlogArticleList(LoginRequiredMixin, ListView):
+class BlogArticleList(ListView):
     template_name = 'blog_app/list_articles.html'
     paginate_by = 10
 
+    blog = None
+
     def get_queryset(self):
-        return self.request.user.blog.articles.order_by('-created').all()
+        self.blog = get_object_or_404(Blog, pk=self.kwargs['pk'])
+        return self.blog.articles.order_by('-created').all()
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['username'] = self.kwargs['username']
+        context['blog'] = self.blog
         return context
