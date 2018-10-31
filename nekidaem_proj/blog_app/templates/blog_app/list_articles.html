@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ username|title }} Articles{% endblock %}
+
+{% block page_content %}
+    <h2>{{ username|title }} Articles</h2>
+    <hr>
+
+    {% for article in object_list %}
+        <h2>{{ article.title }}</h2>
+        <p>{{ article.body }}</p>
+        <p>{{ article.created|date }} {{ article.created|time }}</p>
+        <hr>
+    {% empty %}
+        <p>No articles yet.</p>
+    {% endfor %}
+
+    {% include 'utils/page_obj_paginator.html' %}
+
+{% endblock %}
