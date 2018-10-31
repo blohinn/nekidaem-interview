@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}Subscriptions List{% endblock %}
+
+{% block page_content %}
+    <h2>Subscriptions List</h2>
+
+    {% for blog in object_list %}
+        <p>{{ blog }} - <b>{{ blog.owner.username }}</b> <a
+                href="{% url 'feed_app:unsubscribe' pk=blog.pk %}">Unsubscribe</a></p>
+    {% empty %}
+        <p>No subscriptions yet.</p>
+    {% endfor %}
+
+    {% include 'utils/page_obj_paginator.html' %}
+
+{% endblock %}

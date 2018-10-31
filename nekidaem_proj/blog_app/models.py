@@ -8,6 +8,8 @@ class Blog(models.Model):
     owner = models.OneToOneField(User, on_delete=models.CASCADE, related_name='blog')
     name = models.CharField(max_length=255, default='Personal Blog')
 
+    subscribers = models.ManyToManyField(User, related_name='subscriptions', blank=True)
+
     def __str__(self):
         return self.name
 
