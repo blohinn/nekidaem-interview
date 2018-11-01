@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}{% endblock %}
+
+{% block page_content %}
+    <h1>{{ article.title }}</h1>
+    <p>{{ article.body }}</p>
+    <p>{{ article.created|date }} {{ article.created|time }}</p>
+
+    {% include 'blog_app/utils/article_menu.html' %}
+
+
+    {% if request.user == article.blog.owner %}
+        <p><a href="{% url 'blog_app:edit_article' pk=article.pk %}">Edit article</a></p>
+        <form onsubmit="return confirm('Do you really want to delete article?');"
+              method="POST"
+              action="{% url 'blog_app:delete_article' pk=article.pk %}">
+            {% csrf_token %}
+            <input type="submit" value="Remove Article">
+        </form>
+    {% endif %}
+{% endblock %}

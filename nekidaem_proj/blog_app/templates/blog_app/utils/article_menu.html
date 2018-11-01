@@ -1,0 +1,20 @@
+<ul style="padding-left: 0">
+    <li>
+        <a href="{% url 'blog_app:blog_articles' pk=article.blog.pk %}">
+            <b>{{ article.blog.owner.username }}</b> - {{ article.blog.name }}
+        </a>
+    </li>
+    {% if not request.user.is_anonymous %}
+        {% if request.user not in article.blog.subscribers.all %}
+            <li><a href="{% url 'feed_app:subscribe' pk=article.blog.pk %}">Subscribe to this blog</a></li>
+        {% else %}
+            <li><a href="{% url 'feed_app:unsubscribe' pk=article.blog.pk %}">Unsubscribe this blog</a></li>
+        {% endif %}
+
+        {% if request.user not in article.read_by.all %}
+            <li><a href="{% url 'feed_app:mark_as_read' pk=article.pk %}">Mark as read</a></li>
+        {% else %}
+            <li><a href="{% url 'feed_app:mark_as_unread' pk=article.pk %}">Mark as unread</a></li>
+        {% endif %}
+    {% endif %}
+</ul>
