@@ -1,7 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 
 from .models import BlogArticle, Blog
 from .forms import BlogArticleForm
@@ -49,3 +49,9 @@ class BlogArticleList(ListView):
         context = super().get_context_data(**kwargs)
         context['blog'] = self.blog
         return context
+
+
+class BlogArticleDetail(DetailView):
+    template_name = 'blog_app/detail_article.html'
+    model = BlogArticle
+    context_object_name = 'article'
