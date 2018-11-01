@@ -67,3 +67,8 @@ class BlogArticleDetail(DetailView):
     template_name = 'blog_app/detail_article.html'
     model = BlogArticle
     context_object_name = 'article'
+
+
+class BlogList(ListView):
+    template_name = 'blog_app/list_blog.html'
+    queryset = Blog.objects.order_by('owner__username').all()

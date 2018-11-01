@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}All blog's{% endblock %}
+
+{% block page_content %}
+    <h2>All blog's</h2>
+
+    {% for blog in object_list %}
+        <p><a href="{% url 'blog_app:blog_articles' pk=blog.pk %}">{{ blog }} - <b>{{ blog.owner.username }}</b></a></p>
+    {% empty %}
+        <p>No blog yet.</p>
+    {% endfor %}
+
+
+    {% include 'utils/page_obj_paginator.html' %}
+{% endblock %}
