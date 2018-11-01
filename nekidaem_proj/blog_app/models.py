@@ -27,5 +27,7 @@ class BlogArticle(models.Model):
     body = models.TextField()
     created = models.DateTimeField(auto_now_add=True, editable=True)
 
+    read_by = models.ManyToManyField(User, related_name='read_articles', blank=True)
+
     def __str__(self):
         return self.title
