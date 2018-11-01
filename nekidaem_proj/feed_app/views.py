@@ -4,6 +4,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.views import View
 from django.views.generic import ListView
+from django.db.models import Q
 
 from blog_app.models import Blog, BlogArticle
 
@@ -63,4 +64,6 @@ class Feed(ListView):
         if self.request.user.is_anonymous:
             return BlogArticle.objects.order_by('-created').all()
         else:
-            return BlogArticle.objects.filter(blog__in=self.request.user.subscriptions.all()).order_by('-created').all()
+            return BlogArticle.objects.filter(
+                Q(blog__in=self.request.user.subscriptions.all()) | Q(blog=self.request.user.blog)
+            ).order_by('-created').all()
