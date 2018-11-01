@@ -6,30 +6,11 @@
     <h2>Feed</h2>
 
     {% for article in object_list %}
-        <h2>{{ article.title }}</h2>
+        <h2><a href="{% url 'blog_app:article_detail' pk=article.pk %}">{{ article.title }}</a></h2>
         <p>{{ article.body|truncatechars:240 }}</p>
         <p>{{ article.created|date }} {{ article.created|time }}</p>
 
-        <ul style="padding-left: 0">
-            <li>
-                <a href="{% url 'blog_app:blog_articles' pk=article.blog.pk %}">
-                    <b>{{ article.blog.owner.username }}</b> - {{ article.blog.name }}
-                </a>
-            </li>
-            {% if not request.user.is_anonymous %}
-                {% if request.user not in article.blog.subscribers.all %}
-                    <li><a href="{% url 'feed_app:subscribe' pk=article.blog.pk %}">Subscribe to this blog</a></li>
-                {% else %}
-                    <li><a href="{% url 'feed_app:unsubscribe' pk=article.blog.pk %}">Unsubscribe this blog</a></li>
-                {% endif %}
-
-                {% if request.user not in article.read_by.all %}
-                    <li><a href="{% url 'feed_app:mark_as_read' pk=article.pk %}">Mark as read</a></li>
-                {% else %}
-                    <li><a href="{% url 'feed_app:mark_as_unread' pk=article.pk %}">Mark as unread</a></li>
-                {% endif %}
-            {% endif %}
-        </ul>
+        {% include 'blog_app/utils/article_menu.html' %}
 
         <hr>
     {% empty %}
