@@ -1,5 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
 from django.views import View
 from django.views.generic import ListView, DetailView
 
@@ -24,11 +25,12 @@ class CreateEditArticle(LoginRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
+
         if form.is_valid():
             blog_article = form.save(commit=False)
             blog_article.blog = request.user.blog
             blog_article.save()
-            return redirect('/')
+            return redirect(reverse('blog_app:article_detail', args=[blog_article.pk]))
 
         return render(request, self.template_name, {
             'form': form
