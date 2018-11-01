@@ -17,8 +17,17 @@
                 </a>
             </li>
             {% if not request.user.is_anonymous %}
-                <li><a href="{% url 'feed_app:subscribe' pk=article.blog.pk %}">Subscribe to this blog</a></li>
-                <li><a href="#">Mark as read</a></li>
+                {% if request.user not in article.blog.subscribers.all %}
+                    <li><a href="{% url 'feed_app:subscribe' pk=article.blog.pk %}">Subscribe to this blog</a></li>
+                {% else %}
+                    <li><a href="{% url 'feed_app:unsubscribe' pk=article.blog.pk %}">Unsubscribe this blog</a></li>
+                {% endif %}
+
+                {% if request.user not in article.read_by.all %}
+                    <li><a href="{% url 'feed_app:mark_as_read' pk=article.pk %}">Mark as read</a></li>
+                {% else %}
+                    <li><a href="{% url 'feed_app:mark_as_unread' pk=article.pk %}">Mark as unread</a></li>
+                {% endif %}
             {% endif %}
         </ul>
 
